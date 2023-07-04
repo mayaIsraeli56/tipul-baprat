@@ -1,10 +1,21 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <!-- <router-link to="/">Home</router-link> |
+    <router-link to="/about">About</router-link> -->
   </nav>
   <router-view/>
 </template>
+
+<script>
+
+export default ({
+  data() {
+   return {
+   };
+  },
+})
+</script>
+
 
 <style>
 #app {
@@ -13,6 +24,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  user-select: none;
 }
 
 nav {
