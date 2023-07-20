@@ -1,21 +1,5 @@
 <template>
-  <!-- <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div> -->
-  <!-- <ol dir="rtl">
-    <li class="try111" v-for="ques in shortQues" :key="ques.question">{{ques.question}}
-      <div>א. {{ques.ans1}}</div>
-      <div>ב. {{ques.ans2}}</div>
-      <div>ג. {{ques.ans3}}</div>
-      <div>ד. {{ques.ans4}}</div>
-      <div> תשובה נכונה : {{ques.correctAns}}</div>
-      <br>
-    </li>
-  </ol> -->
-<EasyTrivia></EasyTrivia>
-  <div >
-  </div>
+  <EasyTrivia></EasyTrivia>
 </template>
 
 <script>
@@ -47,7 +31,4 @@ export default ({
 // }
 </script>
 <style scoped>
-.try111 {
-  text-align: right ;
-}
 </style>

@@ -1,4 +1,6 @@
 <template>
+    <HomeBtn class="homeBtn"></HomeBtn>
+    <Explain v-if="quesType === -1" @start-test="startTest"></Explain>
     <shortQues1 v-if="quesType === 0" :count1="count[0]" :shortQuestions="shortQues" @finish="nextQuestionType"></shortQues1>
     <longQues1 v-if="quesType === 1" :count1="count[1]" :longQuestions="longQues" :startPoint="shortQues.length" @finish="nextQuestionType" @go-back="previousQuestionType"></longQues1>
     <trueFalseQues1 v-if="quesType === 2" :count1="count[2]" :trueFalseQues="trueFalseQues" :startPoint="shortQues.length+longQues.length" @finish="nextQuestionType" @go-back="previousQuestionType" ></trueFalseQues1>
@@ -13,6 +15,9 @@ import LongQues1 from '@/components/EasyTriviaComponents/LongQues1.vue'
 import TrueFalseQues1 from '@/components/EasyTriviaComponents/TrueFalseQues1.vue'
 import NumberQues1 from '@/components/EasyTriviaComponents/NumberQues1.vue'
 import ResultsEasyTrivia from '@/components/EasyTriviaComponents/ResultsEasyTrivia.vue'
+import Explain from '@/components/EasyTriviaComponents/Explain.vue'
+import HomeBtn from '@/components/EasyTriviaComponents/HomeBtn.vue'
+
 
 export default ({
     data() {
@@ -21,7 +26,7 @@ export default ({
             longQues : easyQuestion.longQues,
             trueFalseQues : easyQuestion.trueFalseQues,
             numberQues : easyQuestion.numberQues,
-            quesType : 0,
+            quesType : -1,
             sumTrueAns : ['','','',''],
             count: [0,0,0],
             lengthArray : [],
@@ -32,19 +37,23 @@ export default ({
         LongQues1,
         TrueFalseQues1,
         NumberQues1,
-        ResultsEasyTrivia
+        ResultsEasyTrivia,
+        HomeBtn,
+        Explain
     },
     methods : {
+        startTest() {
+            this.quesType++;
+        },
         nextQuestionType (countT) {
             this.sumTrueAns[this.quesType] = countT;
             this.quesType++;
+            this.count[this.quesType] = 0;
+            console.log(this.sumTrueAns);
         },
         previousQuestionType () {
             this.quesType--;
             this.count[this.quesType] = this.lengthArray[this.quesType];
-        },
-        learn () {
-            console.log("learn");
         },
         tryAgain () {
             this.quesType = 0;
@@ -70,5 +79,9 @@ export default ({
 </script>
 
 <style scoped>
-
+.homeBtn{
+    top: 2%;
+    right: 5%;
+    width: 12%;
+}
 </style>

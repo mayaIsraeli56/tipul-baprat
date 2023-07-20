@@ -1,20 +1,23 @@
 <template>
     <div dir="rtl" class="questionDesign">
-        <div>{{count+1+startPoint}}) {{trueFalseQues[count].question}}</div>
+        <NumberArrow :number="(count+1+startPoint)" :moveNext="trueFalseQues[this.count].marked != ''" :moveBack="true" @back="previousQues" @next="nextQues"></NumberArrow>
+        <div class="ques">{{trueFalseQues[count].question}}</div>
         <div @click="clickAns(trueFalseQues[count].ans1)" :class="['ans', trueFalseQues[count].ans1 === trueFalseQues[this.count].marked ? 'marked' : '' ]">{{trueFalseQues[count].ans1}}</div>
         <div @click="clickAns(trueFalseQues[count].ans2)" :class="['ans', trueFalseQues[count].ans2 === trueFalseQues[this.count].marked ? 'marked' : '' ]">{{trueFalseQues[count].ans2}}</div>
     </div>
-    <button id="next" class="btn" v-if="trueFalseQues[this.count].marked !== '' " @click="nextQues">שאלה הבאה</button>
-    <button id="back" class="btn" @click="previousQues" >שאלה אחורה</button>
-    <div>תשובות נכונות : {{countT}}</div>
-    <div>תשובות לא נכונות : {{countF}}</div>
+    <!-- <div>תשובות נכונות : {{countT}}</div>
+    <div>תשובות לא נכונות : {{countF}}</div> -->
 
 </template>
 
 <script>
+import NumberArrow from '@/components/EasyTriviaComponents/NumberArrow.vue'
 
 export default {
     props : ["count1","trueFalseQues","startPoint"],
+    components : {
+        NumberArrow
+    },
     data() {
         return {
            count: 0,
@@ -52,61 +55,54 @@ export default {
             }
         }
     } ,
-    mounted () {
+    beforeMount () {
         this.count = this.count1;
+        this.check();
     }
 }
 </script>
 
 <style scoped>
+
 .questionDesign {
     text-align: right;
-    background-color: pink ;
-    border-radius: 0.2vw;
-    margin: 0.5vh;
-    padding: 2vw;
-    display: inline-block;
     direction: rtl;
+    padding: 2%;
+}
+
+.questionDesign > |*{
+    transition: all 0.5s ease;
 }
 
 .ans {
-    margin-top: 1vh;
+    display: inline-block;
     cursor: pointer;
-    padding: 0.5vh;
-    border-radius: 0.2vh;
-}
-
-.ans:hover {
-    background-color: rgb(253, 215, 221) ;
+    background-image: url("@/assets/shortQuesIcons/shortBubbleIcon.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: center;
+    background-position-y: center;
+    padding: 12%;
+    font-size: xx-large;
+    height: 40%;
+    width: 25%;
+    margin-top: 8%;
+    transition: all 0.5s ease; 
 }
 
 .marked {
-    background-color: rgb(247, 128, 146) ;
+    background-image: url("@/assets/shortQuesIcons/pickedBubbleIcon.png");
+    color: #175C79;
+    font-weight: 600;
 }
 
-.btn {
-    background-color: pink ;
-    width: fit-content;
-    direction: rtl;
-    padding: 1vh;
-    position: absolute;
-    left: 46.5vw;
-    margin-top: 2vh;
-    cursor: pointer;
-    border-radius: 0.4vw ;
+.ques{
+    margin-top: 12%;
+    margin-left: 4%;
+    margin-right: 4%;
+    font-size: xx-large;
 }
 
-.btn:hover {
-    background-color: rgb(253, 215, 221) ;
-}
 
-#next {
-    top: 32vh;
-    left: 39.8vw;
-}
 
-#back {
-    top: 32vh;
-    left: 55.6vw;
-}
 </style>

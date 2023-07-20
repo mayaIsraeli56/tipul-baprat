@@ -1,8 +1,12 @@
 <template>
-    <div v-if="!showQues" class="questionDesign">
-        <button v-for="btn in sumQues" :key="btn" :class="['btn', checkAns[btn] ? 'right' : 'wrong']" @click="picked(btn)">{{btn}}</button>
+    <div v-if="!showQues" >
+        <div class="headline">לחץ על שאלה להצגת התשובה</div>
+        <div class="questionDesign">
+            <div v-for="btn in sumQues" :key="btn" :class="['btn', checkAns[btn] ? 'right' : 'wrong']" @click="picked(btn)">{{btn}}</div>
+        </div>
     </div>
     <ShowQuestion v-else :number="number" :lengthArray="lengthArray" :shortQuestions="shortQuestions" :longQuestions="longQuestions" :trueFalseQues="trueFalseQues" :numberQues="numberQues" @back="back"></ShowQuestion>
+    
 </template>
 
 <script>
@@ -67,35 +71,45 @@ export default {
 
 <style scoped>
 .questionDesign {
-    text-align: right;
-    background-color: pink ;
-    border-radius: 0.2vw;
-    margin: 0.5vh;
-    padding: 2vw;
-    display: flex;
-    width: 30vw;
-    flex-flow: row;
-    flex-wrap: wrap;
+    text-align: center;
     direction: rtl;
-    position: absolute;
-    left: 35vw;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 4%;
 }
 
 .btn {
     text-align: center;
     position: relative;
-    margin: 1vw;
-    width: 5vw;
-    height: 5vh;
-    cursor: pointer;
+    width: 12.5%;
+    font-size: 101%;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: center;
+    background-position-y: center;
+    margin-right: -2%;
+    padding: 2%;
+    margin-top: 4%;
 }
 
 .wrong{
-    background-color: red;
+    background-image: url("@/assets/shortQuesIcons/falseBubbleIcon.png");
 }
 
 .right{
-    background-color: green;
+    background-image: url("@/assets/shortQuesIcons/trueBubbleIcon.png");
 }
+
+.headline{
+    font-size: 152%;
+    margin-top: 20%;
+}
+
+
+
 
 </style>

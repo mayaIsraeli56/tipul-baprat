@@ -1,22 +1,27 @@
 <template>
     <div dir="rtl" class="questionDesign">
-        <div>{{count+1+startPoint}}) {{longQuestions[count].question}}</div>
-        <div @click="clickAns(longQuestions[count].ans1)" :class="['ans', longQuestions[count].ans1 === longQuestions[this.count].marked ? 'marked' : '' ]">1. {{longQuestions[count].ans1}}</div>
-        <div @click="clickAns(longQuestions[count].ans2)" :class="['ans', longQuestions[count].ans2 === longQuestions[this.count].marked ? 'marked' : '' ]">2. {{longQuestions[count].ans2}}</div>
-        <div @click="clickAns(longQuestions[count].ans3)" :class="['ans', longQuestions[count].ans3 === longQuestions[this.count].marked ? 'marked' : '' ]">3. {{longQuestions[count].ans3}}</div>
-        <div @click="clickAns(longQuestions[count].ans4)" :class="['ans', longQuestions[count].ans4 === longQuestions[this.count].marked ? 'marked' : '' ]">4. {{longQuestions[count].ans4}}</div>
+        <NumberArrow :number="(count+1+startPoint)" :moveNext="longQuestions[this.count].marked != ''" :moveBack="true" @back="previousQues" @next="nextQues"></NumberArrow>
+        <div :class="[longQuestions[count].question.length >= 100 ? 'small' : 'large' , 'ques']">{{longQuestions[count].question}}</div> 
+        <div class="container">
+            <div @click="clickAns(longQuestions[count].ans1)" :class="['ans', longQuestions[count].ans1 === longQuestions[this.count].marked ? 'marked' : '' , count === 3 ? 'bigans' : '' , count === 17 ? 'ans34' : '']">{{longQuestions[count].ans1}}</div>
+            <div @click="clickAns(longQuestions[count].ans2)" :class="['ans', longQuestions[count].ans2 === longQuestions[this.count].marked ? 'marked' : '' , count === 3 ? 'bigans' : '' , count === 17 ? 'ans34' : '']">{{longQuestions[count].ans2}}</div>
+            <div v-if="count!=3" @click="clickAns(longQuestions[count].ans3)" :class="['ans', longQuestions[count].ans3 === longQuestions[this.count].marked ? 'marked' : '' , count === 17 ? 'ans34' : '']">{{longQuestions[count].ans3}}</div>
+            <div v-if="count!=3" @click="clickAns(longQuestions[count].ans4)" :class="['ans', longQuestions[count].ans4 === longQuestions[this.count].marked ? 'marked' : '' , count === 17 ? 'ans34' : '' ]">{{longQuestions[count].ans4}}</div>
+        </div>
     </div>
-    <button id="next" class="btn" v-if="longQuestions[this.count].marked !== '' " @click="nextQues">שאלה הבאה</button>
-    <button id="back" class="btn" @click="previousQues" >שאלה אחורה</button>
-    <div>תשובות נכונות : {{countT}}</div>
-    <div>תשובות לא נכונות : {{countF}}</div>
+    <!-- <div>תשובות נכונות : {{countT}}</div>
+    <div>תשובות לא נכונות : {{countF}}</div> -->
 
 </template>
 
 <script>
+import NumberArrow from '@/components/EasyTriviaComponents/NumberArrow.vue'
 
 export default {
     props : ["count1","longQuestions","startPoint"],
+    components : {
+        NumberArrow
+    },
     data() {
         return {
            count: 0,
@@ -54,61 +59,88 @@ export default {
             }
         }
     } ,
-    mounted () {
+    beforeMount () {
         this.count = this.count1;
+        this.check();
     }
 }
 </script>
 
 <style scoped>
+
 .questionDesign {
     text-align: right;
-    background-color: pink ;
-    border-radius: 0.2vw;
-    margin: 0.5vh;
-    padding: 2vw;
-    display: inline-block;
     direction: rtl;
+    padding: 2%;
 }
 
+.questionDesign > |*{
+    transition: all 0.5s ease;
+}
+
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+}
 .ans {
-    margin-top: 1vh;
     cursor: pointer;
-    padding: 0.5vh;
-    border-radius: 0.2vh;
+    background-image: url("@/assets/longQuesIcons/longBubbleIcon.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: center;
+    background-position-y: center;
+    padding: 3rem 2.75rem 3rem 2.75rem;
+    width: 21.5rem;
+    height: 3rem;
+    margin-bottom: -2.5rem;
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s ease; 
 }
 
-.ans:hover {
-    background-color: rgb(253, 215, 221) ;
+.bigans {
+    background-size: 25rem 18.5rem;
+    padding-top: 6.5rem;
+    padding-bottom: 8rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    width: 19rem;
+    height: 6rem;
+    margin-bottom: -3.5rem;
+    margin-top: -1.5rem;
 }
 
+.ans34 {
+    background-size: 25rem 9rem;
+    padding: 4rem 2.75rem 4.5rem 2.75rem;
+    width: 21.5rem;
+    height: 4rem;
+    margin-bottom: -4.5rem;
+    margin-top: -0.5rem;
+}
 .marked {
-    background-color: rgb(247, 128, 146) ;
+    background-image: url("@/assets/longQuesIcons/longPickedBubbleIcon.png");
+    color: #175C79;
+    font-weight: 600;
 }
 
-.btn {
-    background-color: pink ;
-    width: fit-content;
-    direction: rtl;
-    padding: 1vh;
-    position: absolute;
-    left: 46.5vw;
-    margin-top: 2vh;
-    cursor: pointer;
-    border-radius: 0.4vw ;
+.ques{
+    margin-top: 12%;
+    margin-left: 4%;
+    margin-right: 4%;
 }
 
-.btn:hover {
-    background-color: rgb(253, 215, 221) ;
+.small {
+    font-size: 110%;
 }
 
-#next {
-    top: 32vh;
-    left: 39.8vw;
+.large {
+    font-size: xx-large;
 }
 
-#back {
-    top: 32vh;
-    left: 55.6vw;
-}
 </style>

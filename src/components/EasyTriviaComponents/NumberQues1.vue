@@ -1,54 +1,65 @@
 <template>
     <div dir="rtl" class="questionDesign">
+        <NumberArrow :number="(startPoint+1)" :moveNext="false" :moveBack="true" @back="previousQues" ></NumberArrow>
         <form>
-            <div>{{startPoint+1}}) {{numberQues[0].question}}</div>
+            <div class="ques">{{numberQues[0].question}}</div>
             <br>
-            <label>א. {{numberQues[0].ans1}} {{space}}</label>
-            <select v-model="order[0]"  @click="check">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-            </select>
-            <br>
-            <label>ב. {{numberQues[0].ans2}} {{space}}</label>
-            <select v-model="order[1]"  @click="check">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-            </select>
-            <br>
-            <label>ג. {{numberQues[0].ans3}} {{space}}</label>
-            <select v-model="order[2]"  @click="check">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-            </select>
-            <br>
-            <label>ד. {{numberQues[0].ans4}} {{space}}</label>
-            <select v-model="order[3]" @click="check">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-            </select>
+            <div class="container">
+                <div class="mini-container">
+                    <label>{{numberQues[0].ans1}} {{space}}</label>
+                    <select v-model="order[0]" class="selectDesign" @click="check">
+                        <option class="selectNumberColorDesign" value="1">1</option>
+                        <option class="selectNumberColorDesign" value="2">2</option>
+                        <option class="selectNumberColorDesign" value="3">3</option>
+                        <option class="selectNumberColorDesign" value="4">4</option>
+                    </select>
+                </div>
+                <div class="mini-container">
+                    <label>{{numberQues[0].ans2}} {{space}}</label>
+                    <select v-model="order[1]" class="selectDesign"  @click="check">
+                        <option class="selectNumberColorDesign" value="1">1</option>
+                        <option class="selectNumberColorDesign" value="2">2</option>
+                        <option class="selectNumberColorDesign" value="3">3</option>
+                        <option class="selectNumberColorDesign" value="4">4</option>
+                    </select>
+                </div>
+                <div class="mini-container">
+                    <label>{{numberQues[0].ans3}} {{space}}</label>
+                    <select v-model="order[2]" class="selectDesign" @click="check">
+                        <option class="selectNumberColorDesign" value="1">1</option>
+                        <option class="selectNumberColorDesign" value="2">2</option>
+                        <option class="selectNumberColorDesign" value="3">3</option>
+                        <option class="selectNumberColorDesign" value="4">4</option>
+                    </select>
+                </div>
+                <div class="mini-container">
+                    <label>{{numberQues[0].ans4}} {{space}}</label>
+                    <select v-model="order[3]" class="selectDesign" @click="check">
+                        <option class="selectNumberColorDesign" value="1">1</option>
+                        <option class="selectNumberColorDesign" value="2">2</option>
+                        <option class="selectNumberColorDesign" value="3">3</option>
+                        <option class="selectNumberColorDesign" value="4">4</option>
+                    </select>
+                </div>
+            </div>
         </form>
-        <div>{{countT}}</div>
+        <img src="@/assets/easyTriviaIcons/doneIcon.png" id="next" v-if="checkMarkAll" @click="finished">
+        <!-- <div>count t: {{countT}}</div> -->
     </div>
-    <button id="next" class="btn" v-if="checkMarkAll" @click="finished">סיימתי</button>
-    <button id="back" class="btn" @click="previousQues" >שאלה אחורה</button>
-    <div>תשובות נכונות : {{countT}}</div>
-    <div>תשובות לא נכונות : {{countF}}</div>
+    <!-- <div>תשובות נכונות : {{countT}}</div>
+    <div>תשובות לא נכונות : {{countF}}</div> -->
 
 </template>
 
 <script>
+import NumberArrow from '@/components/EasyTriviaComponents/NumberArrow.vue'
 
 
 export default {
     props : ["numberQues","startPoint"],
+    components : {
+        NumberArrow,
+    },
     data() {
         return {
            countT: 1,
@@ -82,61 +93,101 @@ export default {
             return false;
         }
     },
-    mounted () {
+    beforeMount () {
         this.order = this.numberQues[0].marked;
+        this.check();
     }
 }
 </script>
 
 <style scoped>
+.container {
+    position: relative;
+    margin-top: -1%;
+    font-size: 80.5%;
+    line-height: 150%;
+    /*background-image: url("@/assets/basic/bigBubble.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: center;
+    background-position-y: center;*/
+   /* right: 50%;
+    transform: translateX(50%);*/
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.mini-container {
+    background-image: url("@/assets/longQuesIcons/longBubbleIcon.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: center;
+    background-position-y: center;
+    width: 21rem;
+    padding: 3rem 2rem 3.8rem 2rem;;
+    height: 0rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    /*padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-right: 1rem;
+    padding-left: 1rem;*/
+}
+
+label{
+    width: 21rem;
+    text-align: right;
+    padding-right: 6%;
+    padding-left: 10%;
+}
+.ques{
+    margin-top: 6%;
+    margin-left: 4%;
+    margin-right: 4%;
+    font-size: xx-large;
+    transition: all 0.5s ease; 
+}
+
+.selectDesign{
+    font-size: x-large;
+    border-radius: 40%;
+    background-color: rgba(255, 255, 255, 0);
+    border-style: solid;
+    border-color: white;
+    color: white;
+    position: relative;
+    top: 0.1rem;
+    left: 1.5rem;
+    width: 3rem;
+    padding-right: 1%;
+}
+
+.selectNumberColorDesign{
+    color: #6c85b3;
+}
 .questionDesign {
     text-align: right;
-    background-color: pink ;
-    border-radius: 0.2vw;
-    margin: 0.5vh;
-    padding: 2vw;
-    display: inline-block;
     direction: rtl;
+    padding: 2%;
 }
 
-.ans {
-    margin-top: 1vh;
-    cursor: pointer;
-    padding: 0.5vh;
-    border-radius: 0.2vh;
-}
-
-.ans:hover {
-    background-color: rgb(253, 215, 221) ;
-}
-
-.marked {
-    background-color: rgb(247, 128, 146) ;
-}
-
-.btn {
-    background-color: pink ;
-    width: fit-content;
-    direction: rtl;
-    padding: 1vh;
-    position: absolute;
-    left: 46.5vw;
-    margin-top: 2vh;
-    cursor: pointer;
-    border-radius: 0.4vw ;
-}
-
-.btn:hover {
-    background-color: rgb(253, 215, 221) ;
+.questionDesign > |*{
+    transition: all 0.5s ease;
 }
 
 #next {
-    top: 32vh;
-    left: 39.8vw;
+    width: 25%;
+    position: relative;
+    margin-right: 37.5%;
+    margin-top: 2%;
 }
 
-#back {
-    top: 32vh;
-    left: 55.6vw;
+.largeLetter{
+    font-size: larger;
 }
+
 </style>

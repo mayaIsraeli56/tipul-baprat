@@ -1,22 +1,26 @@
 <template>
     <div dir="rtl" class="questionDesign">
-        <div>{{count+1}}) {{shortQuestions[count].question}}</div>
-        <div @click="clickAns(shortQuestions[count].ans1)" :class="['ans', shortQuestions[count].ans1 === shortQuestions[this.count].marked ? 'marked' : '' ]">1. {{shortQuestions[count].ans1}}</div>
-        <div @click="clickAns(shortQuestions[count].ans2)" :class="['ans', shortQuestions[count].ans2 === shortQuestions[this.count].marked ? 'marked' : '' ]">2. {{shortQuestions[count].ans2}}</div>
-        <div @click="clickAns(shortQuestions[count].ans3)" :class="['ans', shortQuestions[count].ans3 === shortQuestions[this.count].marked ? 'marked' : '' ]">3. {{shortQuestions[count].ans3}}</div>
-        <div @click="clickAns(shortQuestions[count].ans4)" :class="['ans', shortQuestions[count].ans4 === shortQuestions[this.count].marked ? 'marked' : '' ]">4. {{shortQuestions[count].ans4}}</div>
+        <NumberArrow :number="(count+1)" :moveNext="(shortQuestions[this.count].marked != '')" :moveBack="(count>0)" @back="count--" @next="nextQues()"></NumberArrow>
+        <div :class="[shortQuestions[count].question.length >= 100 ? 'small' : 'large' , 'ques']"> {{shortQuestions[count].question}}</div>
+        <div class="container">
+            <div @click="clickAns(shortQuestions[count].ans1)" :class="['ans', shortQuestions[count].ans1 === shortQuestions[this.count].marked ? 'marked' : '' ]"> {{shortQuestions[count].ans1}}</div>
+            <div @click="clickAns(shortQuestions[count].ans2)" :class="['ans', shortQuestions[count].ans2 === shortQuestions[this.count].marked ? 'marked' : '' ]"> {{shortQuestions[count].ans2}}</div>
+            <div @click="clickAns(shortQuestions[count].ans3)" :class="['ans', shortQuestions[count].ans3 === shortQuestions[this.count].marked ? 'marked' : '' ]"> {{shortQuestions[count].ans3}}</div>
+            <div @click="clickAns(shortQuestions[count].ans4)" :class="['ans', shortQuestions[count].ans4 === shortQuestions[this.count].marked ? 'marked' : '' ]"> {{shortQuestions[count].ans4}}</div>
+        </div>
     </div>
-    <button id="next" class="btn" v-if="shortQuestions[this.count].marked !== '' " @click="nextQues">שאלה הבאה</button>
-    <button id="back" class="btn" v-if="count>0" @click="count--" >שאלה אחורה</button>
-    <div>תשובות נכונות : {{countT}}</div>
-    <div>תשובות לא נכונות : {{countF}}</div>
-
+    <!-- <div>תשובות נכונות : {{countT}}</div>
+    <div>תשובות לא נכונות : {{countF}}</div> -->
 </template>
 
 <script>
+import NumberArrow from '@/components/EasyTriviaComponents/NumberArrow.vue'
 
 export default {
     props : ["count1","shortQuestions"],
+    components : {
+        NumberArrow
+    },
     data() {
         return {
            count: 0,
@@ -47,61 +51,74 @@ export default {
             }
         }
     } ,
-    mounted () {
+    beforeMount () {
         this.count = this.count1;
+        this.check();
     }
 }
 </script>
 
 <style scoped>
+
 .questionDesign {
     text-align: right;
-    background-color: pink ;
-    border-radius: 0.2vw;
-    margin: 0.5vh;
-    padding: 2vw;
-    display: inline-block;
     direction: rtl;
+    padding: 2%;
+    top: -10%;
 }
 
+.questionDesign > |*{
+    transition: all 0.5s ease;
+}
+.container{
+    position: absolute;
+    display: flex;
+    flex-wrap: wrap;  
+    width: 24rem; 
+    justify-content: center;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
 .ans {
-    margin-top: 1vh;
     cursor: pointer;
-    padding: 0.5vh;
-    border-radius: 0.2vh;
-}
-
-.ans:hover {
-    background-color: rgb(253, 215, 221) ;
+    position: relative;
+    background-image: url("@/assets/shortQuesIcons/shortBubbleIcon.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: center;
+    background-position-y: center;
+    padding: 2rem;
+    font-size: 1.5rem;
+    height: 6rem;
+    width: 6.5rem;
+    margin-top: 3rem;
+    margin-right: 0.6rem;
+    margin-left: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s ease; 
 }
 
 .marked {
-    background-color: rgb(247, 128, 146) ;
+    background-image: url("@/assets/shortQuesIcons/pickedBubbleIcon.png");
+    color: #175C79;
+    font-weight: 600;
 }
 
-.btn {
-    background-color: pink ;
-    width: fit-content;
-    direction: rtl;
-    padding: 1vh;
-    position: absolute;
-    left: 46.5vw;
-    margin-top: 2vh;
-    cursor: pointer;
-    border-radius: 0.4vw ;
+.ques{
+    margin-top: 4%;
+    margin-left: 4%;
+    margin-right: 4%;
 }
 
-.btn:hover {
-    background-color: rgb(253, 215, 221) ;
+.small {
+    font-size: 110%;
 }
 
-#next {
-    top: 32vh;
-    left: 39.8vw;
+.large {
+    font-size: xx-large;
 }
 
-#back {
-    top: 32vh;
-    left: 55.6vw;
-}
 </style>
