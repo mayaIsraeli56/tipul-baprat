@@ -1,6 +1,6 @@
 <template>
     <div v-if="type === 0" class="questionDesign">
-        <NumberArrow :number="(number+1)" :moveNext="false" :moveBack="flase" :showP="true" ></NumberArrow>
+        <NumberArrow :number="(number1+1)" :moveNext="true" :moveBack="(number1!=0)" :showP="true" @next="next" @back="backQues" ></NumberArrow>
         <div :class="[shortQuestions[index].question.length >= 100 ? 'small' : 'large' , 'ques1']">{{shortQuestions[index].question}}</div>
         <div class="container1">
             <div :class="['ans1' , shortQuestions[index].ans1 === shortQuestions[index].correctAns ? 'right1' : '' , shortQuestions[index].ans1 === shortQuestions[index].marked && shortQuestions[index].ans1 !== shortQuestions[index].correctAns ? 'wrong1' : '']">{{shortQuestions[index].ans1}}</div>
@@ -11,7 +11,7 @@
     </div>
 
     <div v-if="type === 1" class="questionDesign">
-        <NumberArrow :number="(number+1)" :moveNext="false" :moveBack="false" :showP="true" ></NumberArrow>
+        <NumberArrow :number="(number1+1)" :moveNext="true" :moveBack="true" :showP="true" @next="next" @back="backQues"></NumberArrow>
         <div :class="[longQuestions[index].question.length >= 100 ? 'small' : 'large' , 'ques4']">{{longQuestions[index].question}}</div>
         <div class="container2">
             <div :class="['ans2' , longQuestions[index].ans1 === longQuestions[index].correctAns ? 'right2' : '' , longQuestions[index].ans1 === longQuestions[index].marked && longQuestions[index].ans1 !== longQuestions[index].correctAns ? 'wrong2' : '' , index === 3 ? 'bigans' : '' , index === 17 ? 'ans34' : '']">{{longQuestions[index].ans1}}</div>
@@ -22,14 +22,14 @@
     </div>
 
     <div v-if="type === 2" class="questionDesign">
-        <NumberArrow :number="(number+1)" :moveNext="false" :moveBack="flase" :showP="true"></NumberArrow>
+        <NumberArrow :number="(number1+1)" :moveNext="true" :moveBack="true" :showP="true" @next="next" @back="backQues"></NumberArrow>
         <div class="ques2">{{trueFalseQues[index].question}}</div>
         <div :class="['ans3' , trueFalseQues[index].ans1 === trueFalseQues[index].correctAns ? 'right1' : '' , trueFalseQues[index].ans1 === trueFalseQues[index].marked && trueFalseQues[index].ans1 !== trueFalseQues[index].correctAns ? 'wrong1' : '' , trueFalseQues[index].ans1 !== trueFalseQues[index].correctAns && trueFalseQues[index].ans1 !== trueFalseQues[index].marked ? 'regular1' : '']">{{trueFalseQues[index].ans1}}</div>
         <div :class="['ans3' , trueFalseQues[index].ans2 === trueFalseQues[index].correctAns ? 'right1' : '' , trueFalseQues[index].ans2 === trueFalseQues[index].marked && trueFalseQues[index].ans2 !== trueFalseQues[index].correctAns ? 'wrong1' : '' , trueFalseQues[index].ans2 !== trueFalseQues[index].correctAns && trueFalseQues[index].ans2 !== trueFalseQues[index].marked ? 'regular1' : '']">{{trueFalseQues[index].ans2}}</div>
     </div>
 
     <div v-if="type === 3" class="questionDesign">
-        <NumberArrow :number="(number+1)" :moveNext="false" :moveBack="flase" :showP="true"></NumberArrow>
+        <NumberArrow :number="(number1+1)" :moveNext="false" :moveBack="true" :showP="true" @back="backQues"></NumberArrow>
         <form>
             <div class="ques3">{{numberQues[0].question}}</div>
             <br>
@@ -77,12 +77,39 @@ export default {
         return {
             index : '',
             type: '',
+            number1:'',
             space: "           ",
         };
     },
     methods : {
         back () {
             this.$emit('back');
+        },
+        backQues() {
+            this.index--;
+            this.number1--;
+            this.checkType();
+        },
+        next() {
+            this.index++;
+            this.number1++;
+            this.checkType();
+        },
+        checkType() {
+            if (this.number1 < this.lengthArray[0] ) { // short questions
+                this.index = this.number1;
+                this.type = 0;
+            } else if (this.number1 < (this.lengthArray[1]+this.lengthArray[0])) { // long questions
+                this.index = this.number1 - this.lengthArray[0];
+                this.type = 1;
+            } else if (this.number1 < (this.lengthArray[2]+this.lengthArray[1]+this.lengthArray[0])) { // true/false questions
+                this.index = this.number1 - this.lengthArray[1]- this.lengthArray[0];
+                this.type = 2;
+
+            } else { // number question
+                this.index = 51;
+                this.type = 3;
+            }
         }
     },
     mounted () {
@@ -103,6 +130,7 @@ export default {
             this.type = 3;
         }
         console.log(this.type);
+        this.number1 = this.number;
     }
 
 };
